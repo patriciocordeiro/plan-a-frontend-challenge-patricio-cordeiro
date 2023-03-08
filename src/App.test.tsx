@@ -1,15 +1,21 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
+import { screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { Router } from 'react-router-dom';
+
 import App from './App';
+import { renderWithProviders } from './app/shared/utils/test.util';
 
-test('renders learn react link', () => {
-  const { getByText } = render(
-    <Provider store={store}>
-      <App />
-    </Provider>
-  );
+describe('App component', () => {
+  it('renders the AppRoutes component', () => {
+    const history = createMemoryHistory({initialEntries:['/login']});
 
-  expect(getByText(/learn/i)).toBeInTheDocument();
+    renderWithProviders(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    const appRoutesElement = screen.getByTestId('app-routes');
+    expect(appRoutesElement).toBeInTheDocument();
+  });
 });
